@@ -1,0 +1,9 @@
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+
+    > div[role=button] {
+        flex: 1 0 50%;
+    }
+}

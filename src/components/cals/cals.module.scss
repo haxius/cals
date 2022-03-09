@@ -1,0 +1,34 @@
+:global(:root) {
+    --bg-color: #1a1a1a;
+    --fg-color: #efefef;
+}
+
+:global(*) {
+    box-sizing: border-box;
+    font-family: Tahoma;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    user-select: none;
+}
+
+:global(html,body) {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+:global(body) {
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+}
+
+.cals {
+    border: 1px solid blue;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0 auto;
+    max-width: 768px;
+    width: 100%;
+}
