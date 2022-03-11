@@ -1,23 +1,33 @@
 .button {
-    border: 1px solid var(--fg-color);
-    cursor: pointer;
-    display: inline-block;
-    padding: 5px 10px;
-    text-align: center;
-    text-transform: uppercase;
-    width: auto;
-    
+  border: 1px solid var(--fg-color);
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 10px;
+  text-align: center;
+  text-transform: uppercase;
+  width: auto;
+
+  &:hover {
+    background-color: var(--fg-color);
+    color: var(--bg-color);
+  }
+
+  &.frameless {
+    border: 0;
+
     &:hover {
-        background-color: var(--fg-color);
-        color: var(--bg-color);
+      background-color: inherit;
+      color: inherit;
     }
+  }
 
-    &.frameless {
-        border: 0;
+  &.disabled {
+    opacity: 0.75;
+    cursor: auto;
 
-        &:hover {
-            background-color: inherit;
-            color: inherit;
-        }
+    &:hover {
+      background-color: inherit;
+      color: inherit;
     }
+  }
 }

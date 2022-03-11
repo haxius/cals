@@ -11,10 +11,10 @@ export interface ICaloriesData {
 }
 
 export interface ICaloriesContext {
-  data: ICaloriesData;
+  getCount: () => number;
   updateCount: (newCount: number) => void;
-  currentDate: Date;
-  setCurrentDate: (newDate: Date) => void;
+  currentDate: string;
+  setCurrentDate: (newDate: string) => void;
 }
 
 export interface ICaloriesContextProperties {
@@ -39,16 +39,23 @@ const safeJSONParse = (jsonString: string | undefined): object | undefined => {
   let result;
 
   try {
-    result = JSON.parse(jsonString || "");
+    result = decodeURIComponent(jsonString || "");
+    result = JSON.parse(result);
   } catch (e: unknown) {}
 
   return result;
 };
 
+const getTodayFromMidnight = () => {
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  return d.toISOString();
+};
+
 const Calories: React.FunctionComponent<ICaloriesContextProperties> = ({
   children,
 }) => {
-  const [currentDate, setCurrentDate] = React.useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = React.useState<string>(getTodayFromMidnight());
 
   const [data, setData] = React.useState<ICaloriesData>(
     (safeJSONParse(Cookies.get("cals")) as ICaloriesData) || {
@@ -58,19 +65,21 @@ const Calories: React.FunctionComponent<ICaloriesContextProperties> = ({
   );
 
   const handleUpdateDb = (newDb: ICaloriesData): void => {
-    Cookies.set(JSON.stringify(newDb), { expires: 14 });
+    Cookies.set("cals", JSON.stringify(newDb), { expires: 14 });
     setData(newDb);
   };
 
   const updateCount = (newCount: number): void => {
     const newDb = { counts: { ...data.counts }, lastUpdated: new Date() };
-    newDb.counts[currentDate.toISOString()] = newCount;
+    newDb.counts[currentDate] = newCount < 0 ? 0 : newCount;
     handleUpdateDb(newDb);
   };
 
+  const getCount = (): number => data.counts[currentDate] || 0;
+
   return (
     <CaloriesContext.Provider
-      value={{ currentDate, data, updateCount, setCurrentDate }}
+      value={{ currentDate, getCount, updateCount, setCurrentDate }}
     >
       {children}
     </CaloriesContext.Provider>

@@ -45,22 +45,29 @@ const daySuffix = (day: number): string => {
 interface IHeaderProperties {}
 
 const Header: React.FunctionComponent = ({}: IHeaderProperties) => {
-  const { currentDate } = useCalories();
+  const { currentDate, setCurrentDate } = useCalories();
 
-  const weekday = weekdays[currentDate.getDay()];
-  const month = months[currentDate.getMonth()];
-  const dateSuffixed = `${currentDate.getDate()}${daySuffix(
-    currentDate.getDate()
+  const d = new Date(currentDate);
+  const weekday = weekdays[d.getDay()];
+  const month = months[d.getMonth()];
+  const dateSuffixed = `${d.getDate()}${daySuffix(
+    d.getDate()
   )}`;
-  const year = currentDate.getFullYear();
+  const year = d.getFullYear();
+
+  const applyDelta = (delta: number) => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + delta);
+    setCurrentDate(newDate.toISOString());
+  };
 
   return (
     <div className={styles.header}>
-      <Button frameless onClick={() => {}}>
+      <Button frameless onClick={() => applyDelta(-1)}>
         Prev
       </Button>
       <Text>{`${weekday}, ${month} ${dateSuffixed}, ${year}`}</Text>
-      <Button frameless onClick={() => {}}>
+      <Button frameless onClick={() => applyDelta(1)}>
         Next
       </Button>
     </div>
